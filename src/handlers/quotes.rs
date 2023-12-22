@@ -1,6 +1,10 @@
-use axum::{extract, http, routing::post, Router};
+use axum::{
+    extract, http,
+    routing::{get, post},
+    Router,
+};
 use serde::{Deserialize, Serialize};
-use sqlx::PgPool;
+use sqlx::{FromRow, PgPool};
 
 #[derive(Debug, Deserialize)]
 struct CreateQuote {
@@ -8,7 +12,7 @@ struct CreateQuote {
     quote: String,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, FromRow)]
 struct Quote {
     id: uuid::Uuid,
     book: String,
@@ -56,8 +60,22 @@ async fn create_quote(
     }
 }
 
+async fn get_quotes(
+    extract::State(pool): extract::State<PgPool>,
+) -> Result<axum::Json<Vec<Quote>>, http::StatusCode> {
+    let res = sqlx::query_as("SELECT * FROM quotes")
+        .fetch_all(&pool)
+        .await;
+
+    match res {
+        Ok(quotes) => Ok(axum::Json(quotes)),
+        Err(_) => Err(http::StatusCode::INTERNAL_SERVER_ERROR),
+    }
+}
+
 pub fn api_routes(pool: PgPool) -> Router {
     Router::new()
         .route("/", post(create_quote))
+        .route("/", get(get_quotes))
         .with_state(pool)
 }
