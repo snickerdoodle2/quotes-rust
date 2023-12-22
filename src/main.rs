@@ -1,9 +1,6 @@
 use std::env;
 
-use axum::{
-    routing::{get, post},
-    Router,
-};
+use axum::{routing::get, Router};
 use sqlx::postgres::PgPoolOptions;
 mod handlers;
 
