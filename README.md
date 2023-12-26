@@ -1,0 +1,32 @@
+# CRUD quotes app
+
+Simple CRUD app made with `rust`, `axum` and `sqlx`.
+
+## Endpoints
+- `GET localhost:8080` - health check
+- `POST localhost:8080/quotes` - Create new quote
+- `GET localhost:8080/quotes` - Read all quotes
+- `PUT localhost:8080/quotes/{id}` - Update quote
+- `DELETE localhost:8080/quotes/{id}` - Delete quote
+
+## Installation
+### Prerequisites
+- [rust](https://rustup.rs/)
+- [just](https://github.com/casey/just) - command runner
+- docker
+- `sqlx-cli` - `cargo install sqlx-cli`
+
+### `.env` file
+Create `.env` file containing:
+``` sh
+DATABASE_ADDRESS=localhost:5432
+POSTGRES_PASSWORD=<YOUR PASSWORD>
+POSTGRES_DB=quotes
+DATABASE_URL=postgresql://postgres:<YOUR PASSWORD>@localhost:5432/quotes
+```
+
+### Migrating database
+To setup the database, simply run `just migrate`
+
+## Running server
+`just run`
