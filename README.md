@@ -26,7 +26,11 @@ DATABASE_URL=postgresql://postgres:<YOUR PASSWORD>@localhost:5432/quotes
 ```
 
 ### Migrating database
-To setup the database, simply run `just migrate`
+To setup the database, simply run
+``` sh
+docker-compose up -d
+just migrate
+```
 
 ## Running server
 `just run`
